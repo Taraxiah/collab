@@ -17,6 +17,10 @@ corpus2= [
 
 #TF-IDF 
 class Vspace:
+    vocab = []
+    idf={}
+    tf={}
+    
     def __init__(self,collection):              #constructor, checks for lowercase and vocab length
         self.collection=collection
         self.chklower()        
@@ -24,9 +28,11 @@ class Vspace:
         
         
     def chklength(self):
-        v_max=sorted(idf)
-        if len(v_max) > 10:
-            v_max.pop
+        v_max=sorted(idf.items(),key=lambda k: k[1],reverse=True)
+        while len(v_max) > 10:
+            v_max.pop()
+
+            
 
         
     
@@ -42,9 +48,7 @@ class Vspace:
         lowercor=[s.lower() for s in self.collection]
         splitcor=[s.split() for s in lowercor]
         onecor=[k for i in splitcor for k in i]
-        vocab = []
-        idf={}
-        tf={} 
+         
 
         for i in onecor:
             if not i in vocab:
@@ -53,10 +57,11 @@ class Vspace:
         print(vocab)
 
 
-        for item in onecor:
-            N=len(self.collection)
-            count=onecor.count(item)
-            idf[item]=(math.log((1+N)/(count+1))+1)
+        for sentence in splitcor:
+            for word in sentence:
+                N=len(self.collection)
+                count=sentence.count(word)
+                idf[word]=(math.log((1+N)/(count+1))+1)
         print("These are the idf values:")
         print(idf)
 
@@ -65,12 +70,12 @@ class Vspace:
         for i in splitcor:
             for term in i:
                 cterm=i.count(term)
-                tf[term]= cterm / len(i)
+                self.tf[term]= cterm / len(i)
         print("These are the tf values:")
-        print(tf)
+        print(self.tf)
 
         
-    def transform(self):                                     #this needs to feed from fit() variables and doesnt
+    def transform(self):                                     #this is just placeholder
         l=[[i] for i in self.collection]
         for doc in l:
             for item in doc:
@@ -80,7 +85,7 @@ class Vspace:
 
         
 
-col1=Vspace(corpus2)
+col1=Vspace(corpus)
 
 col1.fit()
 col1.transform()

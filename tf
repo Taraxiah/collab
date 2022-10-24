@@ -1,56 +1,87 @@
-import re
+import math
 
 
 #Insert any collection of documents here
-corpus = ['This is the first document.',
-          'This document is the second document.',
-          'And this is the third one.',
-          'Is this the first document?']
+corpus = ['The hotel and the stay were great',
+          'This was a great stay',
+          'Great stay in a great destination',
+          'Great destination']
 
+
+corpus2= [
+      'this is the first document',
+      'this document is the second document',
+      'and this is the third one',
+      'is this the first document'] 
+
+vocab=[]
 
 #TF-IDF 
 class Vspace:
-    def __init__(self,v_max):
-        self.v_max=v_max
-        for i in v_max:
-            if i in v_max.isupper():    
-                return True            #boolean for caps
-        if v_max > 10:        
-            v_max.pop()           #truncator
+    def __init__(self,collection):
+        self.collection=collection
+        self.chklower()        
+        self.chklength()
+        
+        
+    def chklength(self):
+        v_max=sorted(idf)
+        if v_max > 10:
+            v_max.pop()
+
+        
+    
+    def chklower(self):
+        for i in self.collection:
+            if i.islower() is False:
+                print("This document needs to be lowercased.")
+                
 
     
     
-    def fit(self):                      #vocab fitter
-            pass
+    def fit(self):
+        lowercor=[s.lower() for s in self.collection]
+        splitcor=[s.split() for s in lowercor]
+        onecor=[k for i in splitcor for k in i]
+        vocab = []
+        idf={}
+        tf={} 
+
+        for i in onecor:
+            if not i in vocab:
+                vocab.append(i)
+        print("This is the vocabulary:")
+        print(vocab)
 
 
-
-#tokenizer for corpus
-lowercor=[s.lower() for s in corpus]
-splitcor=[s.split() for s in lowercor]
-onecor=[k for i in splitcor for k in i]
-speccor=[re.sub(r"[-()\"#/@;:<>{}`+=~|.!?,]", "", s) for s in onecor]
-vocab=[]
-l=[]
-
-for i in speccor:
-    if not i in vocab:
-        vocab.append(i)
-print(vocab)
-
-#vectorizer
-def vector():
-    for word in corpus:
-        if word in vocab:
-            l.append(1)
-        else:
-            l.append(0)
-        continue
-    print(l)
-
-vector()        
-        
+        for item in onecor:
+            N=len(self.collection)
+            count=onecor.count(item)
+            idf[item]=(math.log((1+N)/(count+1))+1)
+        print("These are the idf values:")
+        print(idf)
 
         
+        
+        for i in splitcor:
+            for term in i:
+                cterm=i.count(term)
+                tf[term]= cterm / len(i)
+        print("These are the tf values:")
+        print(tf)
 
-                 
+        
+    def transform(self):                                     #this is just placeholder
+        l=[[i] for i in self.collection]
+        for doc in l:
+            for item in doc:
+                if item in vocab:
+                    pass
+      
+
+        
+
+col1=Vspace(corpus2)
+
+col1.fit()
+col1.transform()

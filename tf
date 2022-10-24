@@ -14,11 +14,10 @@ corpus2= [
       'and this is the third one',
       'is this the first document'] 
 
-vocab=[]
 
 #TF-IDF 
 class Vspace:
-    def __init__(self,collection):
+    def __init__(self,collection):              #constructor, checks for lowercase and vocab length
         self.collection=collection
         self.chklower()        
         self.chklength()
@@ -26,8 +25,8 @@ class Vspace:
         
     def chklength(self):
         v_max=sorted(idf)
-        if v_max > 10:
-            v_max.pop()
+        if len(v_max) > 10:
+            v_max.pop
 
         
     
@@ -39,7 +38,7 @@ class Vspace:
 
     
     
-    def fit(self):
+    def fit(self):                                             #fits vocab from docs collection
         lowercor=[s.lower() for s in self.collection]
         splitcor=[s.split() for s in lowercor]
         onecor=[k for i in splitcor for k in i]
@@ -71,7 +70,7 @@ class Vspace:
         print(tf)
 
         
-    def transform(self):                                     #this is just placeholder
+    def transform(self):                                     #this needs to feed from fit() variables and doesnt
         l=[[i] for i in self.collection]
         for doc in l:
             for item in doc:
